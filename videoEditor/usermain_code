@@ -1,4 +1,4 @@
-import fastcutfit as fc
+from module import fastcutfit as fc
 import os
 import shutil
 while(True):
