@@ -1,0 +1,101 @@
+import fastcutfit as fc
+import os
+import shutil
+while(True):
+    print("---------------------------------")
+    print('1.Trim the video\n''2.crop the video\n''3.Resize_Frame\n''4.Exit\n')
+    opt = int(input('enter the option'))
+    parent_dir = '/content/drive/MyDrive'
+    folder = 'temp'
+    temp_path = os.path.join(parent_dir, folder)
+    os.mkdir(temp_path)
+    if(opt == 1):
+      video = input('enter the path of the video')
+
+      while(True):
+        print("enter the timestamp as a manner like.... 'minute|second|milisecond\n'please give the all three values\n",'otherwise you can put 0')
+        time_stamp_first = input('enter start_time:')
+        time_stamp_second = input('enter end_time:')
+        print('processing.....')
+        
+        path = input('please give the file path where you want to store the new video')
+        res_1 = fc.getFrame(video, time_stamp_first, time_stamp_second,temp_path)
+        if(res_1 == -1):
+          print('please enter again from the begining')
+          continue
+        else:
+          audi_file =fc.trimAudio(video, time_stamp_first, time_stamp_second, temp_path)
+          print('finished........')
+          print('video saved.. and audio save.....')
+          print('now merging audio and video......')
+          fc.audioMergevideo(res_1, audi_file,path)
+          print('finished......')
+          shutil.rmtree(temp_path)
+          break
+    elif(opt == 2):
+      video = input('enter the path of the video')
+      while(True):
+        x1= int(input('enter the x1 coordinate:'))
+        y1 =int(input('enter the y1 coordinate:'))
+        x2 = int(input('enter the x2 coordinate:'))
+        y2 = int(input('enter the y2 coordinate:'))
+        print('processing....')
+        path = input('please give the file path where you want to store the new video')
+        res = fc.getCropFrame(video, x1, y1, x2, y2, temp_path)
+        print(res)
+        if (res ==-1):
+          print("please enter again from the begining")
+          continue
+        else:
+          # print(res)
+          audio_file = fc.getAudio(video,temp_path)
+          
+          print('video and audio saved.....')
+          print('now merging...')
+          
+          fc.audioMergevideo(res, audio_file,path)
+          print('finished.....')
+          shutil.rmtree(temp_path)
+          break
+    elif(opt == 3):
+      video = input('enter the path of the video')
+      print('1.with out maintaining the aspect ratio\n''2.maintaining the aspect ration\n')
+      press = int(input('enter the option'))
+      while True:
+        if press == 1:
+          w_vid = int(input('enter the width'))
+          h_vid = int(input('enter the height'))
+          print('processing....')
+          path = input('please give the file path where you want to store the new video')
+          res_2 = fc.getFrameResize(video, w_vid, h_vid, temp_path)
+          if res_2 == -1:
+            print('please enter again from the begining')
+            continue
+          else:
+            audio_file = fc.getAudio(video,temp_path)
+            print(audio_file)
+            print('video and audio saved....')
+            fc.audioMergevideo(res_2, audio_file,path)
+            print("finished...")
+            shutil.rmtree(temp_path)
+            break
+        if press == 2:
+          w_vid = int(input('enter the width'))
+          print('processing....')
+          path = input('please give the file path where you want to store the new video')
+          res_3 = fc.getFrameAspect(res_3, w_vid, temp_path)
+          if res_3 == -1:
+            print('please enter again from the begining')
+            continue
+          else:
+            audio_file = fc.getAudio(video,temp_path)
+            print('video and audio saved....')
+            fc.audioMergevideo(res_3, audio_file,path)
+            print("finished...")
+            shutil.rmtree(temp_path)
+            break
+
+    elif(opt == 4):
+      print('Thank you for using this application')
+      shutil.rmtree(temp_path)
+      break
